@@ -13,6 +13,7 @@ export default class Post extends Component {
   getCategoryPosts = (category) => {
     Api.getCategoryPosts(category).then(posts => {
       this.setState({ posts })
+      //console.log(posts)
     })
   }
   render () {
