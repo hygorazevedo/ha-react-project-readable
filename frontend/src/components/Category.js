@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 
 class Category extends Component {
   render () {
@@ -10,4 +11,16 @@ class Category extends Component {
   }
 }
 
-export default Category
+function mapStateToProps(state) {
+  return {
+      posts: state.postReducer.posts
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+      //loadPostsFromApi: (e) => { dispatch(loadPostsFromApi(e)) }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Category)

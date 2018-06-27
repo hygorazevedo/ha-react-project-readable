@@ -1,48 +1,43 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { loadCategoriesFromApi } from '../actions'
 import Category from './Category'
-import PropTypes from 'prop-types'
+
+import {
+  loadCategoriesFromApi
+ } from '../actions'
 
 class App extends Component {
-  static propTypes = {
-    categories: PropTypes.array,
-    loadCategoriesFromApi: PropTypes.func
-  }
-
-  componentDidMount () {
+  componentDidMount() {
     this.props.loadCategoriesFromApi()
-  }
-
-  createCategoriesList() {
-    return this.props.categories.map((category, index) => {
-      return (
-        <Category key={ index } category={ category } />
-      )
-    })
   }
 
   render() {
     return (
       <div className="container">
-
+      {
+        this.props.categories.map((category, index) => {
+          if (category.name !== '') {
+            return <Category key={ index } category={ category } />
+          }
+          else {
+            return <div key={ index }></div>
+          }
+        })
+      }
       </div>
     )
   }
 }
 
 function mapStateToProps(state) {
-  console.log(state.categories)
   return {
-      categories: state.categories
+      categories: state.categoryReducer.categories
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-      loadCategoriesFromApi: () => {
-        dispatch(loadCategoriesFromApi())
-      }
+      loadCategoriesFromApi: () => { dispatch(loadCategoriesFromApi()) }
   }
 }
 
