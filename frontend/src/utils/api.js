@@ -1,7 +1,5 @@
-const api = "http://localhost:3001"
+const url = "http://localhost:3001"
 
-
-// Generate a unique token for storing your bookshelf data on the backend server.
 let token = localStorage.token
 if (!token)
   token = localStorage.token = Math.random().toString(36).substr(-8)
@@ -12,44 +10,87 @@ const headers = {
 }
 
 export const getCategories = () =>
-  fetch(`${api}/categories`, { headers })
+  fetch(`${url}/categories`, { headers })
     .then(res => res.json())
     .then(data => data.categories)
 
 export const getCategoryPosts = (category) =>
-  fetch(`${api}/${category}/posts`, { headers })
+  fetch(`${url}/${category}/posts`, { headers })
     .then(res => res.json())
     .then(data => data)
 
 export const getPosts = () =>
-  fetch(`${api}/posts`, { headers })
+  fetch(`${url}/posts`, { headers })
     .then(res => res.json())
     .then(data => data)
 
-/*export const get = (bookId) =>
-  fetch(`${api}/books/${bookId}`, { headers })
+export const getPost = (id) =>
+  fetch(`${url}/posts/${id}`, { headers })
     .then(res => res.json())
-    .then(data => data.book)*/
+    .then(data => data)
 
-
-
-/*export const update = (book, shelf) =>
-  fetch(`${api}/books/${book.id}`, {
-    method: 'PUT',
-    headers: {
-      ...headers,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ shelf })
+export const createPost = (data) =>
+  fetch(`${url}/posts`, { 
+    headers, 
+    method: 'post', 
+    body: JSON.stringify(data) 
   }).then(res => res.json())
+    .then(data => data)
 
-export const search = (query, maxResults) =>
-  fetch(`${api}/search`, {
-    method: 'POST',
-    headers: {
-      ...headers,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ query, maxResults })
+export const editPost = (data) =>
+  fetch(`${url}/posts/${data.id}`, { 
+    headers, 
+    method: 'put', 
+    body: JSON.stringify(data) 
   }).then(res => res.json())
-    .then(data => data.books)*/
+    .then(data => data)
+
+export const deletePost = (id) =>
+  fetch(`${url}/posts/${id}`, { 
+    headers, 
+    method: 'delete'
+  }).then(res => res.json())
+    .then(data => data)
+
+export const getComments = (id) => fetch(
+  `${url}/posts/${id}/comments`, { headers })
+    .then(res => res.json())
+    .then(data => data)
+
+export const getComment = (id) => fetch(
+  `${url}/comments/${id}`, { headers })
+    .then(res => res.json())
+    .then(data => data)
+
+export const createComment = (data) => fetch(
+  `${url}/comments`, {
+    method: 'post',
+    headers: headers,
+    body: JSON.stringify(data)
+  }).then(res => res.json())
+    .then(data => data)
+
+export const editComment = (data) => fetch(
+  `${url}/comments/${data.id}`, {
+    headers,
+    method: 'put',
+    body: JSON.stringify(data)
+  }).then(res => res.json())
+  .then(data => data)
+
+export const deleteComment = (id) => fetch(
+  `${url}/comments/${id}`,
+  {
+    headers,
+    method: 'delete'
+  }
+)
+
+export const votePost = (data, option, path) => fetch(
+  `${url}/${path}/${data}`,
+  {
+    headers,
+    method: 'post',
+    body: JSON.stringify(option)
+  }
+)

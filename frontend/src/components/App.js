@@ -1,44 +1,20 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import Category from './Category'
+import { Route, Switch, Link } from 'react-router-dom'
+import Categories from './Categories'
 
-import {
-  loadCategoriesFromApi
- } from '../actions'
-
-class App extends Component {
-  componentDidMount() {
-    this.props.loadCategoriesFromApi()
-  }
-
+export default class App extends Component {
   render() {
     return (
       <div className="container">
-      {
-        this.props.categories.map((category, index) => {
-          if (category.name !== '') {
-            return <Category key={ index } category={ category } />
-          }
-          else {
-            return <div key={ index }></div>
-          }
-        })
-      }
+        <header>
+          <h1><Link to="/">Reaccit</Link></h1>
+        </header>
+        <Route exact path='/' render={(props) => (
+          <main>
+            <Categories {...props} />
+          </main>
+        )} />
       </div>
     )
   }
 }
-
-function mapStateToProps(state) {
-  return {
-      categories: state.categoryReducer.categories
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-      loadCategoriesFromApi: () => { dispatch(loadCategoriesFromApi()) }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)

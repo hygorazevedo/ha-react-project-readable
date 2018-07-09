@@ -1,0 +1,20 @@
+export const LOAD_CATEGORIES = 'LOAD_CATEGORIES'
+export const SELECT_CATEGORY = 'SELECT_CATEGORY'
+
+
+export const EDIT_POST = 'EDIT_POST'
+export const LOAD_POST = 'LOAD_POST'
+export const LOAD_POSTS = 'LOAD_POSTS'
+export const LOAD_CATEGORY_POSTS = 'LOAD_CATEGORY_POSTS'
+export const REMOVE_POST = 'REMOVE_POST'
+export const VOTE_POST = 'VOTE_POST'
+export const VOTE_POST_FROM_POST = 'VOTE_POST_FROM_POST'
+
+
+export const LOAD_COMMENT = 'LOAD_COMMENT'
+export const LOAD_COMMENTS = 'LOAD_COMMENTS'
+export const REMOVE_COMMENT = 'REMOVE_COMMENT'
+export const VOTE_COMMENT = 'VOTE_COMMENT'
+
+
+export const SELECT_ORDER = 'SELECT_ORDER'
