@@ -1,95 +1,113 @@
 import * as API from '../utils/api'
 import * as actionCreators from './actionCreators'
 
-export function loadCategoriesFromAPI() {
+export function callCarregarCategorias() {
   return (dispatch) => {
     API.getCategories().then(
-      (response) => dispatch(actionCreators.loadCategories(response))
+      (response) => dispatch(actionCreators.carregarCategorias(response))
     )
   }
 }
-export function loadCategoryPostsFromAPI(category) {
+
+export function callCarregarPostagens() {
   return (dispatch) => {
-    API.getCategoryPosts(category).then(
-      (response) => dispatch(
-        actionCreators.loadCategoryPosts(category, response)
-      )
+    API.getPosts().then(
+      (response) => dispatch(actionCreators.carregarPostagens(response))
     )
   }
 }
 
+export function callCarregarPostagensPorCategoria(categoria) {
+  return (dispatch) => {
+    API.getPostsByCategory(categoria).then(
+      (response) => dispatch(actionCreators.carregarPostagensPorCategoria(categoria, response))
+    )
+  }
+}
 
-export function loadPostFromAPI(id) {
+export function callCarregarPostagem(id) {
   return (dispatch) => {
     API.getPost(id).then(
-      (response) => dispatch(actionCreators.loadPosts(response))
+      (response) => dispatch(actionCreators.carregarPostagem(response))
     )
   }
 }
-export function savePostInAPI(post) {
+
+export function callCriarPostagem(postagem) {
   return (dispatch) => {
-    API.createPost(post).then(
-      (response) => dispatch(actionCreators.loadPost(response))
+    API.createPost(postagem).then(
+      (response) => {
+        console.log(response)
+        return (
+          dispatch(actionCreators.carregarPostagem(response))
+        )
+      }
     )
   }
 }
-export function EditPostInAPI(post) {
+
+export function callEditarPostagem(postagem) {
   return (dispatch) => {
-    API.editPost(post).then(
-      (response) => dispatch(actionCreators.loadPost(response))
+    API.editPost(postagem).then(
+      (response) => dispatch(actionCreators.carregarPostagem(response))
     )
   }
 }
-export function DeletePostInAPI(id) {
+
+export function callExcluirPostagem(id) {
   return (dispatch) => {
     API.deletePost(id).then(
-      () => dispatch(actionCreators.removePost(id))
+      () => dispatch(actionCreators.excluirPostagem(id))
     )
   }
 }
 
-
-export function loadComentariesFromAPI(id) {
+export function callCarregarComentarios(id) {
   return (dispatch) => {
     API.getComments(id).then(
-      (response) => dispatch(actionCreators.loadComments(id, response))
+      (response) => dispatch(actionCreators.carregarComentarios(id, response))
     )
   }
 }
-export function loadComentaryFromAPI(id) {
+
+export function callCarregarComentario(id) {
   return (dispatch) => {
     API.getComment(id).then(
-      (response) => dispatch(actionCreators.loadComment(id, response))
+      (response) => dispatch(actionCreators.carregarComentario(id, response))
     )
   }
 }
-export function saveCommentInAPI(id) {
+
+export function callCriarComentario(id) {
   return (dispatch) => {
     API.createComment(id).then(
-      (response) => dispatch(actionCreators.loadComment(id, response))
+      (response) => dispatch(actionCreators.carregarComentario(id, response))
     )
   }
 }
-export function editCommentInAPI(comment) {
+
+export function callEditarComentario(comentario) {
   return (dispatch) => {
-    API.editComment(comment).then(
-      (response) => dispatch(actionCreators.loadComment(comment.id, response))
+    API.editComment(comentario).then(
+      (response) => dispatch(actionCreators.carregarComentario(comentario.id, response))
     )
   }
 }
-export function removeCommentFromAPI(id) {
+
+export function callExcluirComentario(id) {
   return (dispatch) => {
     API.deleteComment(id).then(
-      () => dispatch(actionCreators.removeComment(id))
+      () => dispatch(actionCreators.excluirComentario(id))
     )
   }
 }
-export function saveVoteInAPI(id, data, path, fromPost) {
-  let voto = (data.option === 'upVote') ? 1 : -1
 
+export function callVotar(id, data, path, fromPost) {
+  let voto = (data.option === 'upVote') ? 1 : -1
+  console.log(`${id} ${data.option} ${path} ${fromPost} ${voto}`)
   return (dispatch) => {
-    API.votePost(id, data, path).then(
-      () => dispatch(actionCreators.vote(id, voto, path, fromPost))
+    API.votePost(id, data.option, path).then(
+      () => dispatch(actionCreators.votar(id, voto, path, fromPost))
     )
   }
 }

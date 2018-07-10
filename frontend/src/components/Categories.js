@@ -1,45 +1,48 @@
 import React, { Component } from 'react';
-
-import { capitalize } from '../utils/helper'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { selectCategory } from '../actions/actionCreators'
-import { loadComentariesFromAPI } from '../actions/index'
+import { Route, Link } from 'react-router-dom'
+
+import Posts from './Posts'
+
+import { selecionarCategoria } from '../actions/actionCreators'
+import { callCarregarCategorias } from '../actions/index'
 
 class Categories extends Component {
     componentDidMount() {
-        this.props.loadComentariesFromAPI()
+        this.props.callCarregarCategorias()
     }
 
     handleSelecionarCategoria = (e) => {
         e.preventDefault()
 
-        let category = e.target.attributes.getNamedItem('category').value
+        let categoria = e.target.attributes.getNamedItem('categoria').value
+        this.props.selecionarCategoria(categoria)
 
-        this.props.selectCategory(category)
-
-        window.location = '/' + category
+    //window.location = '/' + categoria
     }
+
     render() {
-        let categories = this.props.categories.categories
+        let categorias = this.props.categorias.categorias
 
         return (
-        <section>
-            <h3>categories</h3>
-            <ul>
-            <li><Link to="/">Todas</Link></li>
-            {categories !== undefined && categories.map((category) => (
-                <li key={category.name}><Link to="#" onClick={this.handleSelecionarCategoria} category={category.name}>{capitalize(category.name)}</Link></li>
-            ))}
-            </ul>
-        </section>
+            <section className="categorias-wrapper">
+                <h3>Categorias</h3>
+                <div className='btn-group' role='group' aria-label='categorias'>
+                    <Link to="/" className='btn btn-secondary'>Todas</Link>
+                    {
+                        categorias !== undefined && categorias.map((categoria) => (
+                            <Link key={categoria.path} to="/1" className='btn btn-secondary' onClick={this.handleSelecionarCategoria} categoria={categoria.path}>{categoria.name}</Link>
+                        ))
+                    }
+                </div>
+            </section>
         )
     }
 }
 
-const mapStateToProps = ({ category, categories }) => ({
-    category,
-    categories
+const mapStateToProps = ({ categoria, categorias }) => ({
+    categoria,
+    categorias
 })
 
-export default connect(mapStateToProps, { loadComentariesFromAPI, selectCategory })(Categories)
+export default connect(mapStateToProps, { callCarregarCategorias, selecionarCategoria })(Categories)

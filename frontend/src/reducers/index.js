@@ -1,16 +1,16 @@
 import { combineReducers } from 'redux'
-import categories from './categories'
-import comments from './comments'
-import comment from './comment'
-import order from './order'
-import posts from './posts'
-import post from './post'
+import categorias from './categorias'
+import comentarios from './comentarios'
+import comentario from './comentario'
+import ordem from './ordem'
+import postagens from './postagens'
+import postagem from './postagem'
 
 export default combineReducers({
-  categories: categories,
-  comments: comments,
-  comment: comment,
-  order: order,
-  posts: posts,
-  post: post
+  categorias: categorias,
+  comentarios: comentarios,
+  comentario: comentario,
+  postagens: postagens,
+  postagem: postagem,
+  ordem: ordem
 })

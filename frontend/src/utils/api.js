@@ -9,88 +9,105 @@ const headers = {
   'Authorization': token
 }
 
-export const getCategories = () =>
-  fetch(`${url}/categories`, { headers })
-    .then(res => res.json())
-    .then(data => data.categories)
+export const getCategories = () => fetch(
+  `${url}/categories`,
+  {
+    headers: headers,
+  }
+).then(res => res.json()).then(data => data.categories)
 
-export const getCategoryPosts = (category) =>
-  fetch(`${url}/${category}/posts`, { headers })
-    .then(res => res.json())
-    .then(data => data)
+export const getPosts = () => fetch(
+  `${url}/posts`,
+  {
+    headers: headers,
+  }
+).then(res => res.json()).then(data => data)
 
-export const getPosts = () =>
-  fetch(`${url}/posts`, { headers })
-    .then(res => res.json())
-    .then(data => data)
+export const getPostsByCategory = (data) => fetch(
+  `${url}/${data}/posts`,
+  {
+    headers: headers,
+  }
+).then(res => res.json()).then(data => data)
 
-export const getPost = (id) =>
-  fetch(`${url}/posts/${id}`, { headers })
-    .then(res => res.json())
-    .then(data => data)
+export const getPost = (data) => fetch(
+  `${url}/posts/${data}`,
+  {
+    headers: headers,
+  }
+).then(res => res.json()).then(data => data)
 
-export const createPost = (data) =>
-  fetch(`${url}/posts`, { 
-    headers, 
-    method: 'post', 
-    body: JSON.stringify(data) 
-  }).then(res => res.json())
-    .then(data => data)
-
-export const editPost = (data) =>
-  fetch(`${url}/posts/${data.id}`, { 
-    headers, 
-    method: 'put', 
-    body: JSON.stringify(data) 
-  }).then(res => res.json())
-    .then(data => data)
-
-export const deletePost = (id) =>
-  fetch(`${url}/posts/${id}`, { 
-    headers, 
-    method: 'delete'
-  }).then(res => res.json())
-    .then(data => data)
-
-export const getComments = (id) => fetch(
-  `${url}/posts/${id}/comments`, { headers })
-    .then(res => res.json())
-    .then(data => data)
-
-export const getComment = (id) => fetch(
-  `${url}/comments/${id}`, { headers })
-    .then(res => res.json())
-    .then(data => data)
-
-export const createComment = (data) => fetch(
-  `${url}/comments`, {
+export const createPost = (data) => fetch(
+  `${url}/posts`,
+  {
     method: 'post',
     headers: headers,
     body: JSON.stringify(data)
-  }).then(res => res.json())
-    .then(data => data)
+  }
+).then(res => res.json()).then(data => data)
+
+export const editPost = (data) => fetch(
+  `${url}/posts/${data.id}`,
+  {
+    method: 'put',
+    headers: headers,
+    body: JSON.stringify(data)
+  }
+).then(res => res.json()).then(data => data)
+
+export const deletePost = (data) => fetch(
+  `${url}/posts/${data}`,
+  {
+    method: 'delete',
+    headers: headers
+  }
+)
+
+export const getComments = (data) => fetch(
+  `${url}/posts/${data}/comments`,
+  {
+    headers: headers
+  }
+).then(res => res.json()).then(data => data)
+
+export const getComment = (data) => fetch(
+  `${url}/comments/${data}`,
+  {
+    headers: headers
+  }
+).then(res => res.json()).then(data => data)
+
+export const createComment = (data) => fetch(
+  `${url}/comments`,
+  {
+    method: 'post',
+    headers: headers,
+    body: JSON.stringify(data)
+  }
+).then(res => res.json()).then(data => data)
 
 export const editComment = (data) => fetch(
-  `${url}/comments/${data.id}`, {
-    headers,
-    method: 'put',
-    body: JSON.stringify(data)
-  }).then(res => res.json())
-  .then(data => data)
-
-export const deleteComment = (id) => fetch(
-  `${url}/comments/${id}`,
+  `${url}/comments/${data.id}`,
   {
-    headers,
-    method: 'delete'
+    method: 'put',
+    headers: headers,
+    body: JSON.stringify(data)
+  }
+).then(res => res.json()).then(data => data)
+
+export const deleteComment = (data) => fetch(
+  `${url}/comments/${data}`,
+  {
+    method: 'delete',
+    headers: headers
   }
 )
 
 export const votePost = (data, option, path) => fetch(
   `${url}/${path}/${data}`,
   {
-    headers,
     method: 'post',
+    headers: headers,
     body: JSON.stringify(option)
   }
 )
