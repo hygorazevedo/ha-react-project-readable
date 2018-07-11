@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { callCarregarCategorias, callEditarPostagem, callCarregarPostagem } from '../actions'
 import { connect } from 'react-redux'
+import { capitalize } from '../utils/helpers'
 
-import { 
-  callCarregarCategorias, 
-  callEditarPostagem, 
-  callCarregarPostagem 
-} from '../actions/index'
-
-class EditPost extends Component {
+class EditarPostagem extends Component {
   state = {
     titulo: '',
     autor: '',
@@ -70,14 +66,17 @@ class EditPost extends Component {
     return (
       <main>
         <div className="voltar-btn-wrapper">
-          <button><Link to="/">Voltar</Link></button>
+          <button className="btn btn-default"><Link to="/">Voltar</Link></button>
         </div>
         <section className="main-content">
-          <h3 className="post-form-title">Editar Postagem</h3>
-          <form className="post-form" onSubmit={this.handleEditarPostagem}>
-            <div className="form-group">
-              <label>Título:</label>
+          <h3>Editar Postagem</h3>
+          <form onSubmit={this.handleEditarPostagem}>
+          <div className="form row">
+            <div className="col-md-3 mb-3">
+              <label htmlFor="titulo">Título</label>
               <input
+                className="form-control"
+                id="titulo"
                 name="titulo"
                 type="text"
                 placeholder="Título"
@@ -86,9 +85,11 @@ class EditPost extends Component {
                 onChange={(e) => this.handleInput(e)}
               />
             </div>
-            <div className="form-group">
-              <label>Autor:</label>
+            <div className="col-md-3 mb-3">
+              <label htmlFor="autor">Autor</label>
               <input
+                className="form-control"
+                id="autor"
                 name="autor"
                 type="text"
                 placeholder="Autor"
@@ -97,21 +98,28 @@ class EditPost extends Component {
                 onChange={(e) => this.handleInput(e)}
               />
             </div>
-            <div className="form-group">
-              <label>Categoria:</label>
-              <select name="categoria" value={this.state.categoria} onChange={(e) => this.handleInput(e)}>
+            <div className="col-md-3 mb-3">
+              <label htmlFor="categoria">Categoria</label>
+              <select className="custom-select" name="categoria" value={this.state.categoria} onChange={(e) => this.handleInput(e)}>
                 <option value="">Selecione</option>
                 {categorias !== undefined && categorias.map((categoria) => (
-                  <option key={ categoria.path } value={ categoria.path }>{ categoria.name }</option>
+                  <option key={categoria.name} value={categoria.path}>{capitalize(categoria.name)}</option>
                 ))}
               </select>
             </div>
-            <div className="form-group">
-              <label>Corpo:</label>
-              <textarea name="corpo" value={this.state.corpo} onChange={(e) => this.handleInput(e)}/>
+            <div className="col-md-9 mb-3">
+              <label htmlFor="corpo">Corpo</label>
+              <textarea
+                className="form-control"
+                id="corpo"
+                name="corpo"
+                value={this.state.corpo} 
+                onChange={(e) => this.handleInput(e)}
+              />
             </div>
+          </div>
             <div className="form-group">
-              <button>Editar</button>
+              <button className="btn btn-default">Editar</button>
             </div>
           </form>
         </section>
@@ -125,4 +133,4 @@ const mapStateToProps = ({ categorias, postagem }) => ({
   postagem
 })
 
-export default connect(mapStateToProps, { callCarregarCategorias, callEditarPostagem, callCarregarPostagem })(EditPost)
+export default connect(mapStateToProps, { callCarregarCategorias, callEditarPostagem, callCarregarPostagem })(EditarPostagem)

@@ -1,42 +1,44 @@
-import React, { Component } from 'react';
-import { Route, Switch, Link } from 'react-router-dom'
-
-import Error from './Error'
-import Categories from './Categories'
-import Posts from './Posts'
-import NewPost from './NewPost'
+import React, { Component } from 'react'
+import '../index.css'
+import { Route, Switch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import Categorias from './Categorias'
+import PostsTable from './PostsTable'
+import CriarPostagem from './CriarPostagem'
+import EditarPostagem from './EditarPostagem'
+import EditarComentario from './EditarComentario'
 import Post from './Post'
-import EditPost from './EditPost'
-import EditComment from './EditComment'
+import Error from './Error'
 
-
-export default class App extends Component {
+class App extends Component {
   render() {
     return (
       <div className="container">
         <header>
-          <h1><Link to="/">Udacity - Reading</Link></h1>
+          <h1><Link to="/">Udacity - Leitura</Link></h1>
         </header>
         <Route exact path='/' render={(props) => (
           <main>
-            <Categories {...props} />
-            <Posts {...props} />
+            <Categorias {...props}/>
+            <PostsTable {...props}/>
           </main>
-        )} />
+        )}/>
         <Switch>
-          <Route exact path='/error' component={Error} />
-          <Route exact path='/:category' render={(props) => (
+          <Route exact path='/error' component={Error}/>
+          <Route exact path='/:categoria' render={(props) => (
             <main>
-              <Categories {...props} />
-              <Posts {...props} />
+              <Categorias {...props}/>
+              <PostsTable {...props}/>
             </main>
-          )} />
-          <Route exact path='/postagens/criar' component={NewPost} />
-          <Route exact path='/:categoria/:id' component={Post} />
-          <Route exact path='/postagens/:id/editar' component={EditPost} />
-          <Route exact path='/comentarios/:id/editar' component={EditComment} />
+          )}/>
+          <Route exact path='/postagens/criar' component={CriarPostagem}/>
+          <Route exact path='/:categoria/:id' component={Post}/>
+          <Route exact path='/postagens/:id/editar' component={EditarPostagem}/>
+          <Route exact path='/comentarios/:id/editar' component={EditarComentario}/>
         </Switch>
       </div>
-    )
+    );
   }
 }
+
+export default App;
