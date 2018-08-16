@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { capitalize } from '../utils/helpers'
 import Moment from 'moment'
 import Comentarios from './Comentarios'
+import { Button, Glyphicon } from 'react-bootstrap'
 
 class Post extends Component {
   componentDidMount() {
@@ -61,8 +62,12 @@ class Post extends Component {
             <div className="votes-wrapper">
               <span>{comentarios.length} comentarios | </span>
               <span>{postagem.voteScore} votos</span>
-              <button className="btn btn-default" style={{'marginRight':'5px'}} onClick={() => this.handleVotar(postagem.id, 'upVote')}>+</button>
-              <button className="btn btn-default" onClick={() => this.handleVotar(postagem.id, 'downVote')}>-</button>
+              <Button bsStyle="success" onClick={() => this.handleVotar(postagem.id, 'upVote')}>
+                <Glyphicon glyph="thumbs-up"/>
+              </Button>
+              <Button bsStyle="warning" onClick={() => this.handleVotar(postagem.id, 'downVote')}>
+                <Glyphicon glyph="thumbs-down"/>
+              </Button>
             </div>
           </div>
           <hr/>
@@ -70,7 +75,8 @@ class Post extends Component {
             {postagem.body}
           </div>
           <div>
-            <button className="btn btn-default" onClick={() => this.handleExcluirPostagem(postagem.id)}>Excluir</button>
+            <Button bsStyle="primary"><Link to={`/postagens/${postagem.id}/editar`}>Editar</Link></Button>
+            <Button bsStyle="danger" onClick={() => this.handleExcluirPostagem(postagem.id)}>Excluir</Button>
           </div>
           <hr/>
         </section>

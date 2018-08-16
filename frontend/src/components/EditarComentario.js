@@ -59,7 +59,7 @@ class EditarComentario extends Component {
     return (
       <main>
         <div className="voltar-btn-wrapper">
-          <button className="btn btn-default"><Link to="/postagem/${}">Voltar</Link></button>
+          <button className="btn btn-default"><Link to={"/postagens/" + this.props.comentario.comentario.parentId}>Voltar</Link></button>
         </div>
         <section className="main-content">
           <h3 className="post-form-title">Editar Comentário</h3>

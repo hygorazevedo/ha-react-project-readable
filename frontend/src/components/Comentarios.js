@@ -4,6 +4,7 @@ import { callCarregarComentarios, callCriarComentario, callExcluirComentario, ca
 import { connect } from 'react-redux'
 import Moment from 'moment'
 import sortBy from 'sort-by'
+import { Button, Glyphicon } from 'react-bootstrap'
 
 class Comentarios extends Component {
   state = {
@@ -64,13 +65,17 @@ class Comentarios extends Component {
               </div>
               <div className="comentario-footer">
                 <div>
-                  <button style={{'marginRight':'5px'}}><Link to={`/comentarios/${comentario.id}/editar`}>Editar</Link></button>
-                  <button onClick={() => this.handleExcluirComentario(comentario.id)}>Excluir</button>
+                  <Button bsStyle="primary"><Link to={`/comentarios/${comentario.id}/editar`}>Editar</Link></Button>
+                  <Button bsStyle="danger" onClick={() => this.handleExcluirComentario(comentario.id)}>Excluir</Button>
                 </div>
                 <div className="votes-wrapper">
                   <span>{comentario.voteScore} votos</span>
-                  <button style={{'marginRight':'5px'}} onClick={() => this.handleVotar(comentario.id, 'upVote')}>+1</button>
-                  <button onClick={() => this.handleVotar(comentario.id, 'downVote')}>-1</button>
+                  <Button bsStyle="success" onClick={() => this.handleVotar(comentario.id, 'upVote')}>
+                    <Glyphicon glyph="thumbs-up"/>
+                  </Button>
+                  <Button bsStyle="warning" onClick={() => this.handleVotar(comentario.id, 'downVote')}>
+                    <Glyphicon glyph="thumbs-down"/>
+                  </Button>
                 </div>
               </div>
               <hr/>
@@ -84,7 +89,7 @@ class Comentarios extends Component {
           <br/>
           <textarea name="corpo" placeholder="Corpo do comentário" required/>
           <br/>
-          <button>Comentar</button>
+          <button className="btn btn-default">Comentar</button>
         </form>
       </section>
     )

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { callCarregarPostagens, callCarregarPostagensPorCategoria, callExcluirPostagem, selecionarOrdem, callVotar } from '../actions'
 import Moment from 'moment'
 import sortBy from 'sort-by'
+import { Table, Button, Glyphicon } from 'react-bootstrap'
 
 class PostsTable extends Component {
   state = {
@@ -70,16 +71,16 @@ class PostsTable extends Component {
           </div>
           <button className="btn btn-default"><Link to="/postagens/criar">Nova Postagem</Link></button>
         </div>
-        <table className="table table-striped table-dark">
+        <Table responsive>
           <thead>
             <tr>
-              <th scope="col">Título</th>
-              <th scope="col">Categoria</th>
-              <th scope="col">Autor</th>
-              <th scope="col">Data</th>
-              <th scope="col">Comentários</th>
-              <th scope="col">Votos</th>
-              <th scope="col">Ações</th>
+              <th>Título</th>
+              <th>Categoria</th>
+              <th>Autor</th>
+              <th>Data</th>
+              <th>Comentários</th>
+              <th>Votos</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -94,14 +95,20 @@ class PostsTable extends Component {
                   <span style={{ 'marginRight':'5px' }}>{postagem.voteScore}</span>
                 </td>
                 <td>
-                  <button className="btn btn-default" style={{ 'marginRight':'5px' }}><Link to={`/${postagem.category}/${postagem.id}`}>Ver</Link></button>
-                  <button className="btn btn-default" style={{ 'marginRight':'5px' }}><Link to={`/postagens/${postagem.id}/editar`}>Editar</Link></button>
-                  <button className="btn btn-default" onClick={() => this.handleExcluirPostagem(postagem.id)}>Excluir</button>
+                  <Button bsStyle="success" onClick={() => this.handleVotar(postagem.id, 'upVote')}>
+                    <Glyphicon glyph="thumbs-up"/>
+                  </Button>
+                  <Button bsStyle="warning" onClick={() => this.handleVotar(postagem.id, 'downVote')}>
+                    <Glyphicon glyph="thumbs-down"/>
+                  </Button>
+                  <Button><Link to={`/${postagem.category}/${postagem.id}`}><Glyphicon glyph="zoom-in"/></Link></Button>
+                  <Button bsStyle="primary"><Link to={`/postagens/${postagem.id}/editar`}><Glyphicon glyph="pencil"/></Link></Button>
+                  <Button bsStyle="danger" onClick={() => this.handleExcluirPostagem(postagem.id)}><Glyphicon glyph="trash"/></Button>
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </Table>
       </section>
     )
   }
