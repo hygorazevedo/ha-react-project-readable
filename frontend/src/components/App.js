@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import '../index.css'
-import { Route, Switch } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { Link, Route, Switch } from 'react-router-dom'
 import Categorias from './Categorias'
 import PostsTable from './PostsTable'
 import CriarPostagem from './CriarPostagem'
@@ -24,7 +23,7 @@ class App extends Component {
           </main>
         )}/>
         <Switch>
-          <Route exact path='/error' component={Error}/>
+          <Route exact path='/404' component={Error} />
           <Route exact path='/:categoria' render={(props) => (
             <main>
               <Categorias {...props}/>

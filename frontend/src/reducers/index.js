@@ -45,7 +45,10 @@ function postagens(state = initialStatePostagens, action) {
         ...state,
         postagens: state.postagens.map(postagem => {
           if(postagem.id === action.id) {
-            postagem.voteScore = postagem.voteScore + action.voto
+            return {
+              ...postagem,
+              voteScore: postagem.voteScore + action.voto
+            }
           }
 
           return postagem;
@@ -118,7 +121,10 @@ function comentarios(state = initialStateComentarios, action) {
         ...state,
         comentarios: state.comentarios.map(comentario => {
           if(comentario.id === action.id) {
-            comentario.voteScore = comentario.voteScore + action.voto
+            return {
+              ...comentario,
+              voteScore: comentario.voteScore + action.voto
+            }
           }
 
           return comentario;

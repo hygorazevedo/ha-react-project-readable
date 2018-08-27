@@ -17,7 +17,7 @@ class Post extends Component {
     let postagem = nextProps.postagem.postagem
 
     if(postagem.deleted === true) {
-      window.location = '/erro404'
+      window.location = '/404'
     }
   }
 

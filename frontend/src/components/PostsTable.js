@@ -54,7 +54,7 @@ class PostsTable extends Component {
   render() {
     let postagens = this.props.postagens.postagens
 
-    postagens.sort(sortBy(`-${this.state.ordem}`))
+    const postagensOrdenadas = [...postagens].sort(sortBy(`-${this.state.ordem}`))
 
     return (
       <section className="posts-table-wrapper">
