@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { capitalize } from '../utils/helpers'
-import { callCarregarCategorias, selecionarCategoria } from '../actions'
+import { 
+  callCarregarCategorias, 
+  callCarregarPostagens,
+  callCarregarPostagensPorCategoria, 
+  selecionarCategoria } from '../actions'
 import { connect } from 'react-redux'
 
 class CategoriasList extends Component {
@@ -11,12 +15,16 @@ class CategoriasList extends Component {
 
   handleSelecionarCategoria = (e) => {
     e.preventDefault()
-
+    
     let categoria = e.target.attributes.getNamedItem('categoria').value
 
     this.props.selecionarCategoria(categoria)
 
-    window.location = '/' + categoria
+    if(categoria === 'all') {
+      this.props.callCarregarPostagens()
+    } else {
+      this.props.callCarregarPostagensPorCategoria(categoria)
+    }
   }
 
   render() {
@@ -26,7 +34,7 @@ class CategoriasList extends Component {
       <section className="categorias-wrapper">
         <h3>Categorias</h3>
         <div className="btn-group">
-          <Link to="/" className="btn btn-secondary">Todas</Link>
+          <Link to="#" onClick={this.handleSelecionarCategoria} categoria='all' className="btn btn-secondary">Todas</Link>
           {
             categorias !== undefined && categorias.map((categoria) => (
               <Link to="#" className="btn btn-secondary" key={categoria.name} onClick={this.handleSelecionarCategoria} categoria={categoria.path}>{capitalize(categoria.name)}</Link>
@@ -43,4 +51,8 @@ const mapStateToProps = ({ categoria, categorias }) => ({
   categorias
 })
 
-export default connect(mapStateToProps, { callCarregarCategorias, selecionarCategoria })(CategoriasList)
+export default connect(mapStateToProps, { 
+  callCarregarCategorias, 
+  callCarregarPostagens, 
+  callCarregarPostagensPorCategoria, 
+  selecionarCategoria })(CategoriasList)

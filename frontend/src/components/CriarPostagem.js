@@ -1,29 +1,50 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import {  callCarregarCategorias, callCriarPostagem } from '../actions'
 import { connect } from 'react-redux'
 import { capitalize } from '../utils/helpers'
 
 class CriarPostagem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      titulo: '',
+      autor: '',
+      categoria: '',
+      corpo: ''
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleBack = this.handleBack.bind(this)
+  }
+  
   componentDidMount() {
     this.props.callCarregarCategorias()
   }
 
-  handleCriarPostagem = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault()
 
     let postagem = {
       id: Date.now(),
       timestamp: Date.now(),
-      author: e.target.autor.value,
-      body: e.target.corpo.value,
-      title: e.target.titulo.value,
-      category: e.target.categoria.value
+      author: this.state.autor,
+      body: this.state.corpo,
+      title: this.state.titulo,
+      category: this.state.categoria
     }
 
     this.props.callCriarPostagem(postagem)
 
-    window.location = '/'
+    this.props.history.push('/')
+  }
+
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value })
+  }
+
+  handleBack = () => {
+    this.props.history.push('/')
   }
 
   render() {
@@ -31,12 +52,10 @@ class CriarPostagem extends Component {
 
     return (
       <main>
-        <div className="voltar-btn-wrapper">
-          <button className="btn btn-default"><Link to="/">Voltar</Link></button>
-        </div>
         <section className="main-content">
+          <button className="btn btn-default" onClick={this.handleBack}>Voltar</button>
           <h3>Criar Postagem</h3>
-          <form onSubmit={this.handleCriarPostagem}>
+          <form onSubmit={this.handleSubmit}>
             <div className="form row">
               <div className="col-md-3 mb-3">
                 <label htmlFor="titulo">Título</label>
@@ -47,6 +66,8 @@ class CriarPostagem extends Component {
                   type="text"
                   placeholder="Título"
                   required
+                  value={this.state.titulo}
+                  onChange={this.handleChange}
                 />
               </div>
               <div className="col-md-3 mb-3">
@@ -58,11 +79,19 @@ class CriarPostagem extends Component {
                   type="text"
                   placeholder="Autor"
                   required
+                  value={this.state.autor}
+                  onChange={this.handleChange}
                 />
               </div>
               <div className="col-md-3 mb-3">
                 <label htmlFor="categoria">Categoria</label>
-                <select className="custom-select" name="categoria">
+                <select 
+                  className="form-control" 
+                  name="categoria" 
+                  required
+                  value={this.state.categoria}
+                  onChange={this.handleChange}
+                >
                   <option value="">Selecione</option>
                   {categorias !== undefined && categorias.map((categoria) => (
                     <option key={categoria.name} value={categoria.path}>{capitalize(categoria.name)}</option>
@@ -75,6 +104,9 @@ class CriarPostagem extends Component {
                   className="form-control"
                   id="corpo"
                   name="corpo"
+                  required
+                  value={this.state.corpo}
+                  onChange={this.handleChange}
                 />
               </div>
             </div>

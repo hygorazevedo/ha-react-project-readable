@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { callCarregarPostagens, callCarregarPostagensPorCategoria, callExcluirPostagem, selecionarOrdem, callVotar } from '../actions'
 import Moment from 'moment'
 import sortBy from 'sort-by'
-import { Table, Button, Glyphicon } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 
 class PostsTable extends Component {
   state = {
@@ -12,18 +12,14 @@ class PostsTable extends Component {
   }
 
   componentDidMount() {
-    let categoria = this.props.match.params.categoria
-
-    if(categoria === undefined) {
-      this.props.callCarregarPostagens()
-    } else {
-      this.props.callCarregarPostagensPorCategoria(categoria)
-    }
+    this.props.callCarregarPostagens()
   }
 
   componentWillReceiveProps(nextProps) {
-    let ordem = nextProps.ordem.ordem
+    if(this.props.postagens.postagens['error'])
+    this.props.history.push('/error-404')
 
+    let ordem = nextProps.ordem.ordem
     this.setState({
       ordem: ordem
     })
@@ -54,7 +50,7 @@ class PostsTable extends Component {
   render() {
     let postagens = this.props.postagens.postagens
 
-    const postagensOrdenadas = [...postagens].sort(sortBy(`-${this.state.ordem}`))
+    postagens.sort(sortBy(`-${this.state.ordem}`))
 
     return (
       <section className="posts-table-wrapper">
@@ -64,12 +60,12 @@ class PostsTable extends Component {
             <div className="input-group-prepend">
               <label className="input-group-text" htmlFor="inputGroupSelect01">Ordenar por</label>
             </div>
-            <select className="custom-select" onChange={this.handleSelecionarOrdem}>
+            <select className="form-control" onChange={this.handleSelecionarOrdem}>
               <option value="voteScore">Votos</option>
               <option value="timestamp">Data</option>
             </select>
           </div>
-          <button className="btn btn-default"><Link to="/postagens/criar">Nova Postagem</Link></button>
+          <button className="btn btn-default"><Link to="/postagem/criar">Nova Postagem</Link></button>
         </div>
         <Table responsive>
           <thead>
@@ -84,29 +80,37 @@ class PostsTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {postagens !== undefined && postagens.map((postagem) => (
-              <tr key={postagem.id}>
-                <td>{postagem.title}</td>
-                <td>{postagem.category}</td>
-                <td>{postagem.author}</td>
-                <td>{Moment.unix(postagem.timestamp/1000).format('DD/MM/YYYY')}</td>
-                <td>{postagem.commentCount}</td>
-                <td>
-                  <span style={{ 'marginRight':'5px' }}>{postagem.voteScore}</span>
-                </td>
-                <td>
-                  <Button bsStyle="success" onClick={() => this.handleVotar(postagem.id, 'upVote')}>
-                    <Glyphicon glyph="thumbs-up"/>
-                  </Button>
-                  <Button bsStyle="warning" onClick={() => this.handleVotar(postagem.id, 'downVote')}>
-                    <Glyphicon glyph="thumbs-down"/>
-                  </Button>
-                  <Button><Link to={`/${postagem.category}/${postagem.id}`}><Glyphicon glyph="zoom-in"/></Link></Button>
-                  <Button bsStyle="primary"><Link to={`/postagens/${postagem.id}/editar`}><Glyphicon glyph="pencil"/></Link></Button>
-                  <Button bsStyle="danger" onClick={() => this.handleExcluirPostagem(postagem.id)}><Glyphicon glyph="trash"/></Button>
-                </td>
-              </tr>
-            ))}
+            {postagens !== undefined && postagens.map((postagem) => {
+              return (
+                <tr key={postagem.id}>
+                  <td>{postagem.title}</td>
+                  <td>{postagem.category}</td>
+                  <td>{postagem.author}</td>
+                  <td>{Moment.unix(postagem.timestamp/1000).format('DD/MM/YYYY')}</td>
+                  <td>{postagem.commentCount}</td>
+                  <td>
+                    <span style={{ 'marginRight':'5px' }}>{postagem.voteScore}</span>
+                  </td>
+                  <td>
+                    <button className="btn btn-success" onClick={() => this.handleVotar(postagem.id, 'upVote')}>
+                      <span className="glyphicon glyphicon-thumbs-up"/>
+                    </button>
+                    <button className="btn btn-warning" onClick={() => this.handleVotar(postagem.id, 'downVote')}>
+                      <span className="glyphicon glyphicon-thumbs-down"/>
+                    </button>
+                    <Link className='btn btn-default' to={`/postagem?id=${postagem.id}`}>
+                      <span className="glyphicon glyphicon-zoom-in"/>
+                    </Link>
+                    <Link className='btn btn-primary' to={`/postagem/editar?id=${postagem.id}`}>
+                      <span className="glyphicon glyphicon-pencil"/>
+                    </Link>
+                    <button className='btn btn-danger' onClick={() => this.handleExcluirPostagem(postagem.id)}>
+                      <span className="glyphicon glyphicon-trash"/>
+                    </button>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </Table>
       </section>

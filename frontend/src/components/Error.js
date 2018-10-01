@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Error = () => (
  <div className="alert alert-danger">
-   <p>Este conteúdo foi removido.</p>
+   <p>Um erro ocorreu.</p>
    <Link to="/">Retornar para a página inicial</Link>
  </div>
 )

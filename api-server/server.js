@@ -133,7 +133,6 @@ app.get('/categories', (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -146,7 +145,6 @@ app.get('/:category/posts', (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -159,7 +157,6 @@ app.get('/posts', (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                  error: 'There was an error.'
           })
@@ -172,7 +169,6 @@ app.post('/posts', bodyParser.json(), (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                  error: 'There was an error.'
           })
@@ -185,7 +181,6 @@ app.get('/posts/:id', (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -199,7 +194,6 @@ app.delete('/posts/:id', (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -214,7 +208,6 @@ app.post('/posts/:id', bodyParser.json(), (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -227,7 +220,6 @@ app.put('/posts/:id', bodyParser.json(), (req, res) => {
       .then(
         (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -240,7 +232,6 @@ app.get('/posts/:id/comments', (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -253,7 +244,6 @@ app.get('/comments/:id', (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -266,7 +256,6 @@ app.put('/comments/:id', bodyParser.json(), (req, res) => {
       .then(
         (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -279,7 +268,6 @@ app.post('/comments', bodyParser.json(), (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -293,7 +281,6 @@ app.post('/comments/:id', bodyParser.json(), (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })
@@ -306,7 +293,6 @@ app.delete('/comments/:id', (req, res) => {
       .then(
           (data) => res.send(data),
           (error) => {
-              console.error(error)
               res.status(500).send({
                   error: 'There was an error.'
               })

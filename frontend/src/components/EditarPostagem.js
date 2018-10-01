@@ -1,34 +1,37 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { callCarregarCategorias, callEditarPostagem, callCarregarPostagem } from '../actions'
 import { connect } from 'react-redux'
 import { capitalize } from '../utils/helpers'
+import queryString from 'query-string'
 
 class EditarPostagem extends Component {
-  state = {
-    titulo: '',
-    autor: '',
-    categoria: '',
-    corpo: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      titulo: '',
+      autor: '',
+      categoria: '',
+      corpo: ''
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleBack = this.handleBack.bind(this)
   }
 
   componentDidMount() {
+    const query = queryString.parse(this.props.location.search)
+
     this.props.callCarregarCategorias()
-    this.props.callCarregarPostagem(this.props.match.params.id)
-
-    let postagem = this.props.postagem.postagem
-
-    this.setState({
-      titulo: postagem.title,
-      autor: postagem.author,
-      categoria: postagem.category,
-      corpo: postagem.body
-    })
+    this.props.callCarregarPostagem(query.id)
   }
 
   componentWillReceiveProps(nextProps) {
-    let postagem = nextProps.postagem.postagem
+    if(nextProps.postagem.postagem.deleted || nextProps.postagem.postagem['error']) {
+      this.props.history.push('/error-404')
+    }
 
+    let postagem = nextProps.postagem.postagem
     this.setState({
       titulo: postagem.title,
       autor: postagem.author,
@@ -37,87 +40,82 @@ class EditarPostagem extends Component {
     })
   }
 
-  handleEditarPostagem = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault()
 
-    let postagem = {
-      id: this.props.match.params.id,
-      timestamp: Date.now(),
-      author: e.target.autor.value,
-      body: e.target.corpo.value,
-      title: e.target.titulo.value,
-      category: e.target.categoria.value
-    }
-
+    let postagem = this.props.postagem.postagem
+    postagem.author = this.state.autor
+    postagem.body = this.state.corpo
+    postagem.title = this.state.titulo
+    postagem.category = this.state.categoria
+    
     this.props.callEditarPostagem(postagem)
-
-    window.location = '/'
+    
+    this.props.history.push(`/postagem?id=${this.props.postagem.postagem.id}`)
   }
 
-  handleInput = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value })
+  }
+
+  handleBack = (event) => {
+    this.props.history.push(`/postagem?id=${this.props.postagem.postagem.id}`)
   }
 
   render() {
-    let categorias = this.props.categorias.categorias
-
     return (
       <main>
-        <div className="voltar-btn-wrapper">
-          <button className="btn btn-default"><Link to="/">Voltar</Link></button>
-        </div>
         <section className="main-content">
+          <button className="btn btn-default" onClick={this.handleBack}>Voltar</button>
           <h3>Editar Postagem</h3>
-          <form onSubmit={this.handleEditarPostagem}>
-          <div className="form row">
-            <div className="col-md-3 mb-3">
-              <label htmlFor="titulo">Título</label>
-              <input
-                className="form-control"
-                id="titulo"
-                name="titulo"
-                type="text"
-                placeholder="Título"
-                required
-                value={this.state.titulo}
-                onChange={(e) => this.handleInput(e)}
-              />
+          <form onSubmit={this.handleSubmit}>
+            <div className="form row">
+              <div className="col-md-3 mb-3">
+                <label htmlFor="titulo">Título</label>
+                <input
+                  className="form-control"
+                  id="titulo"
+                  name="titulo"
+                  type="text"
+                  placeholder="Título"
+                  required
+                  value={this.state.titulo}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div className="col-md-3 mb-3">
+                <label htmlFor="autor">Autor</label>
+                <input
+                  className="form-control"
+                  id="autor"
+                  name="autor"
+                  type="text"
+                  placeholder="Autor"
+                  required
+                  value={this.state.autor}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div className="col-md-3 mb-3">
+                <label htmlFor="categoria">Categoria</label>
+                <select className="form-control" name="categoria" value={this.state.categoria} onChange={this.handleChange}>
+                  <option value="">Selecione</option>
+                  {this.props.categorias.categorias !== undefined && this.props.categorias.categorias.map((categoria) => (
+                    <option key={categoria.name} value={categoria.path}>{capitalize(categoria.name)}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-9 mb-3">
+                <label htmlFor="corpo">Corpo</label>
+                <textarea
+                  className="form-control"
+                  id="corpo"
+                  name="corpo"
+                  value={this.state.corpo}
+                  onChange={this.handleChange}
+                />
+              </div>
             </div>
-            <div className="col-md-3 mb-3">
-              <label htmlFor="autor">Autor</label>
-              <input
-                className="form-control"
-                id="autor"
-                name="autor"
-                type="text"
-                placeholder="Autor"
-                required
-                value={this.state.autor}
-                onChange={(e) => this.handleInput(e)}
-              />
-            </div>
-            <div className="col-md-3 mb-3">
-              <label htmlFor="categoria">Categoria</label>
-              <select className="custom-select" name="categoria" value={this.state.categoria} onChange={(e) => this.handleInput(e)}>
-                <option value="">Selecione</option>
-                {categorias !== undefined && categorias.map((categoria) => (
-                  <option key={categoria.name} value={categoria.path}>{capitalize(categoria.name)}</option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-9 mb-3">
-              <label htmlFor="corpo">Corpo</label>
-              <textarea
-                className="form-control"
-                id="corpo"
-                name="corpo"
-                value={this.state.corpo} 
-                onChange={(e) => this.handleInput(e)}
-              />
-            </div>
-          </div>
             <div className="form-group">
               <button className="btn btn-default">Editar</button>
             </div>

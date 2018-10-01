@@ -1,34 +1,42 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { callCarregarComentarios, callCriarComentario, callExcluirComentario, callVotar } from '../actions'
+import { callCarregarPostagem, callCarregarComentarios, callCriarComentario, callExcluirComentario, callVotar } from '../actions'
 import { connect } from 'react-redux'
 import Moment from 'moment'
 import sortBy from 'sort-by'
-import { Button, Glyphicon } from 'react-bootstrap'
+import queryString from 'query-string'
 
 class Comentarios extends Component {
   state = {
-    ordem: 'voteScore'
+    ordem: 'voteScore',
+    id:''
   }
 
   componentDidMount() {
-    this.props.callCarregarComentarios(this.props.id)
+    const query = queryString.parse(this.props.location.search)
+    this.props.callCarregarComentarios(query.id)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.comentario.comentario.deleted || nextProps.comentario.comentario['error']) {
+      this.props.history.push('/error-404')
+    }
   }
 
   handleCriarComentario = (e) => {
     e.preventDefault()
 
+    const query = queryString.parse(this.props.location.search)
+
     let comentario = {
       id: Date.now(),
-      parentId: this.props.id,
+      parentId: query.id,
       timestamp: Date.now(),
       author: e.target.autor.value,
       body: e.target.corpo.value,
     }
-
     this.props.callCriarComentario(comentario)
-
-    window.location = '/postagens/' + this.props.id
+    window.location = `${this.props.location.pathname}${this.props.location.search}`
   }
 
   handleExcluirComentario = (id) => {
@@ -38,7 +46,7 @@ class Comentarios extends Component {
       this.props.callExcluirComentario(id)
     }
 
-    window.location = '/postagens/' + this.props.id
+    this.props.history.go(this.props.location.pathname)
   }
 
   handleVotar = (id, option) => {
@@ -53,7 +61,6 @@ class Comentarios extends Component {
     let comentarios = this.props.comentarios.comentarios
 
     comentarios.sort(sortBy(`-${this.state.ordem}`))
-
     return (
       <section className="comentarios-wrapper">
         <ul>
@@ -65,17 +72,21 @@ class Comentarios extends Component {
               </div>
               <div className="comentario-footer">
                 <div>
-                  <Button bsStyle="primary"><Link to={`/comentarios/${comentario.id}/editar`}>Editar</Link></Button>
-                  <Button bsStyle="danger" onClick={() => this.handleExcluirComentario(comentario.id)}>Excluir</Button>
+                  <Link className="btn btn-primary" to={`/comentario/editar?id=${comentario.id}`}>
+                    <span className="glyphicon glyphicon-pencil"/>
+                  </Link>
+                  <button className="btn btn-danger" onClick={() => this.handleExcluirComentario(comentario.id)}>
+                    <span className="glyphicon glyphicon-trash"/>
+                  </button>
                 </div>
                 <div className="votes-wrapper">
                   <span>{comentario.voteScore} votos</span>
-                  <Button bsStyle="success" onClick={() => this.handleVotar(comentario.id, 'upVote')}>
-                    <Glyphicon glyph="thumbs-up"/>
-                  </Button>
-                  <Button bsStyle="warning" onClick={() => this.handleVotar(comentario.id, 'downVote')}>
-                    <Glyphicon glyph="thumbs-down"/>
-                  </Button>
+                  <button className="btn btn-success" onClick={() => this.handleVotar(comentario.id, 'upVote')}>
+                    <span className="glyphicon glyphicon-thumbs-up"/>
+                  </button>
+                  <button className="btn btn-warning" onClick={() => this.handleVotar(comentario.id, 'downVote')}>
+                    <span className="glyphicon glyphicon-thumbs-down"/>
+                  </button>
                 </div>
               </div>
               <hr/>
@@ -96,10 +107,11 @@ class Comentarios extends Component {
   }
 }
 
-const mapStateToProps = ({ comentarios, comentario, ordem }) => ({
+const mapStateToProps = ({ comentarios, comentario, ordem, postagem }) => ({
   comentarios,
   comentario,
-  ordem
+  ordem,
+  postagem
 })
 
-export default connect(mapStateToProps, { callCarregarComentarios, callCriarComentario, callExcluirComentario, callVotar })(Comentarios)
+export default connect(mapStateToProps, { callCarregarPostagem, callCarregarComentarios, callCriarComentario, callExcluirComentario, callVotar })(Comentarios)

@@ -2,32 +2,30 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { callCarregarPostagem, callCarregarComentarios, callExcluirPostagem, callVotar } from '../actions'
 import { connect } from 'react-redux'
-import { capitalize } from '../utils/helpers'
 import Moment from 'moment'
 import Comentarios from './Comentarios'
-import { Button, Glyphicon } from 'react-bootstrap'
+import queryString from 'query-string'
 
 class Post extends Component {
   componentDidMount() {
-    this.props.callCarregarPostagem(this.props.match.params.id)
-    this.props.callCarregarComentarios(this.props.match.params.id)
+    const query = queryString.parse(this.props.location.search)
+    this.props.callCarregarPostagem(query.id)
+    this.props.callCarregarComentarios(query.id)
   }
 
   componentWillReceiveProps(nextProps) {
-    let postagem = nextProps.postagem.postagem
-
-    if(postagem.deleted === true) {
-      window.location = '/404'
+    if(nextProps.postagem.postagem.deleted || nextProps.postagem.postagem['error']) {
+      this.props.history.push('/error-404')
     }
   }
 
   handleExcluirPostagem = (id) => {
     let confirm = window.confirm('Deseja mesmo excluir este registro?')
 
-    if(confirm === true) {
+    if (confirm === true) {
       this.props.callExcluirPostagem(id)
 
-      window.location = '/'
+      this.props.history.push('/')
     }
   }
 
@@ -45,42 +43,42 @@ class Post extends Component {
 
     return (
       <main>
-        <div className="voltar-btn-wrapper">
-          <button className="btn btn-default"><Link to="/">Voltar</Link></button>
-        </div>
         <section className="post-wrapper">
+          <Link className="btn btn-default" to='/'>Voltar</Link>
           <div className="post-header">
             <div>
               <h3>{postagem.title}</h3>
-              <span className="small">
-                Por {postagem.author} em {Moment.unix(postagem.timestamp/1000).format('DD/MM/YYYY')}
-              </span>
-              <Link className="btn btn-info" to="#">
-                {postagem.category !== undefined && capitalize(postagem.category)}
-              </Link>
             </div>
             <div className="votes-wrapper">
               <span>{comentarios.length} comentarios | </span>
               <span>{postagem.voteScore} votos</span>
-              <Button bsStyle="success" onClick={() => this.handleVotar(postagem.id, 'upVote')}>
-                <Glyphicon glyph="thumbs-up"/>
-              </Button>
-              <Button bsStyle="warning" onClick={() => this.handleVotar(postagem.id, 'downVote')}>
-                <Glyphicon glyph="thumbs-down"/>
-              </Button>
+              <button className="btn btn-success" onClick={() => this.handleVotar(postagem.id, 'upVote')}>
+                <span className="glyphicon glyphicon-thumbs-up" />
+              </button>
+              <button className="btn btn-warning" onClick={() => this.handleVotar(postagem.id, 'downVote')}>
+                <span className="glyphicon glyphicon-thumbs-down" />
+              </button>
             </div>
           </div>
-          <hr/>
           <div className="post-body">
             {postagem.body}
+            <div className='pull-right'>
+              <span className="small">
+                Por {postagem.author} em {Moment.unix(postagem.timestamp / 1000).format('DD/MM/YYYY')}
+              </span>
+            </div>
           </div>
           <div>
-            <Button bsStyle="primary"><Link to={`/postagens/${postagem.id}/editar`}>Editar</Link></Button>
-            <Button bsStyle="danger" onClick={() => this.handleExcluirPostagem(postagem.id)}>Excluir</Button>
+            <Link className="btn btn-primary" to={`${this.props.location.pathname}/editar${this.props.location.search}`}>
+              <span className="glyphicon glyphicon-pencil"/>
+            </Link>
+            <button className="btn btn-danger" onClick={() => this.handleExcluirPostagem(postagem.id)}>
+              <span className="glyphicon glyphicon-trash"/>
+            </button>
           </div>
-          <hr/>
+          <hr />
         </section>
-        <Comentarios id={this.props.match.params.id}/>
+        <Comentarios {...this.props} />
       </main>
     )
   }

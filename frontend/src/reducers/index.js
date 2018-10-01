@@ -50,7 +50,7 @@ function postagens(state = initialStatePostagens, action) {
               voteScore: postagem.voteScore + action.voto
             }
           }
-
+  
           return postagem;
         })
       }
@@ -117,19 +117,19 @@ function comentarios(state = initialStateComentarios, action) {
         comentarios: action.comentarios
       }
     case VOTAR_COMENTARIO:
-      return {
-        ...state,
-        comentarios: state.comentarios.map(comentario => {
-          if(comentario.id === action.id) {
-            return {
-              ...comentario,
-              voteScore: comentario.voteScore + action.voto
-            }
+    return {
+      ...state,
+      comentarios: state.comentarios.map(comentario => {
+        if(comentario.id === action.id) {
+          return {
+            ...comentario,
+            voteScore: comentario.voteScore + action.voto
           }
+        }
 
-          return comentario;
-        })
-      }
+        return comentario;
+      })
+    }
     default:
       return state
   }
