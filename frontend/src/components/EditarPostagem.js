@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { callCarregarCategorias, callEditarPostagem, callCarregarPostagem } from '../actions'
 import { connect } from 'react-redux'
 import { capitalize } from '../utils/helpers'
-import queryString from 'query-string'
 
 class EditarPostagem extends Component {
   constructor(props) {
@@ -20,10 +19,11 @@ class EditarPostagem extends Component {
   }
 
   componentDidMount() {
-    const query = queryString.parse(this.props.location.search)
+    console.log(this.props.match.params)
+    const params = this.props.match.params
 
     this.props.callCarregarCategorias()
-    this.props.callCarregarPostagem(query.id)
+    this.props.callCarregarPostagem(params.postagem)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,7 +51,7 @@ class EditarPostagem extends Component {
     
     this.props.callEditarPostagem(postagem)
     
-    this.props.history.push(`/postagem?id=${this.props.postagem.postagem.id}`)
+    this.props.history.push(`/${postagem.category}/${postagem.id}`)
   }
 
   handleChange = (event) => {
@@ -59,7 +59,7 @@ class EditarPostagem extends Component {
   }
 
   handleBack = (event) => {
-    this.props.history.push(`/postagem?id=${this.props.postagem.postagem.id}`)
+    this.props.history.push(`/${this.state.categoria}/${this.props.postagem.postagem.id}`)
   }
 
   render() {

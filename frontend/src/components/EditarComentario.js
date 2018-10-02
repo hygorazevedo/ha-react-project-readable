@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { callEditarComentario, callCarregarComentario } from '../actions'
 import { connect } from 'react-redux'
-import queryString from 'query-string'
 
 class EditarComentario extends Component {
   constructor(props) {
@@ -17,8 +16,7 @@ class EditarComentario extends Component {
   }
 
   componentDidMount() {
-    const query = queryString.parse(this.props.location.search)
-    this.props.callCarregarComentario(query.id)
+    this.props.callCarregarComentario(this.props.match.params.comentario)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,7 +43,7 @@ class EditarComentario extends Component {
     }
     this.props.callEditarComentario(comentario)
 
-    this.props.history.push(`/postagem?id=${this.props.comentario.comentario.parentId}`)
+    this.props.history.push(`/${this.props.match.params.categoria}/${this.props.match.params.postagem}`)
   }
 
   handleChange = (event) => {
@@ -53,7 +51,7 @@ class EditarComentario extends Component {
   }
 
   handleBack = (event) => {
-    this.props.history.push(`/postagem?id=${this.props.comentario.comentario.parentId}`)
+    this.props.history.push(`/${this.props.match.params.categoria}/${this.props.match.params.postagem}`)
   }
 
   render() {

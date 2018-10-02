@@ -16,19 +16,25 @@ class App extends Component {
         <header>
           <h1><Link to="/">Udacity - Leitura</Link></h1>
         </header>
-        
+        <Route exact path='/' render={(props) => (
+            <main>
+              <Categorias {...props}/>
+              <PostsTable {...props}/>
+            </main>
+          )}/>
         <Switch>
-          <Route exact path='/' render={(props) => (
+        <Route exact path='/error-404' component={Error} />
+          <Route exact path='/:categoria' render={(props) => (
             <main>
               <Categorias {...props}/>
               <PostsTable {...props}/>
             </main>
           )}/>
           <Route exact path='/postagem/criar' render={props => <CriarPostagem {...props} />}/>
-          <Route exact path='/postagem' render={props => <Post {...props}/> } />
-          <Route exact path='/postagem/editar' render={props => <EditarPostagem {...props} />} />
-          <Route exact path='/comentario/editar' render={props => <EditarComentario {...props} />}/>
-          <Route exact path='/*' component={Error} />
+          <Route exact path='/:categoria/:postagem' render={props => <Post {...props}/> } />
+          <Route exact path='/:categoria/:postagem/editar' render={props => <EditarPostagem {...props} />} />
+          <Route exact path='/:categoria/:postagem/:comentario/editar' render={props => <EditarComentario {...props} />}/>
+          
         </Switch>
       </div>
     );

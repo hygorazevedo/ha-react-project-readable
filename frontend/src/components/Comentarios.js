@@ -4,7 +4,6 @@ import { callCarregarPostagem, callCarregarComentarios, callCriarComentario, cal
 import { connect } from 'react-redux'
 import Moment from 'moment'
 import sortBy from 'sort-by'
-import queryString from 'query-string'
 
 class Comentarios extends Component {
   state = {
@@ -13,8 +12,7 @@ class Comentarios extends Component {
   }
 
   componentDidMount() {
-    const query = queryString.parse(this.props.location.search)
-    this.props.callCarregarComentarios(query.id)
+    this.props.callCarregarComentarios(this.props.match.params.postagem)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -26,17 +24,15 @@ class Comentarios extends Component {
   handleCriarComentario = (e) => {
     e.preventDefault()
 
-    const query = queryString.parse(this.props.location.search)
-
     let comentario = {
       id: Date.now(),
-      parentId: query.id,
+      parentId: this.props.match.params.postagem,
       timestamp: Date.now(),
       author: e.target.autor.value,
       body: e.target.corpo.value,
     }
     this.props.callCriarComentario(comentario)
-    window.location = `${this.props.location.pathname}${this.props.location.search}`
+    this.props.history.go(`${this.props.location.pathname}`)
   }
 
   handleExcluirComentario = (id) => {
@@ -46,7 +42,7 @@ class Comentarios extends Component {
       this.props.callExcluirComentario(id)
     }
 
-    this.props.history.go(this.props.location.pathname)
+    this.props.history.go(`${this.props.location.pathname}`)
   }
 
   handleVotar = (id, option) => {
@@ -72,7 +68,7 @@ class Comentarios extends Component {
               </div>
               <div className="comentario-footer">
                 <div>
-                  <Link className="btn btn-primary" to={`/comentario/editar?id=${comentario.id}`}>
+                  <Link className="btn btn-primary" to={`/${this.props.match.params.categoria}/${this.props.match.params.postagem}/${comentario.id}/editar`}>
                     <span className="glyphicon glyphicon-pencil"/>
                   </Link>
                   <button className="btn btn-danger" onClick={() => this.handleExcluirComentario(comentario.id)}>

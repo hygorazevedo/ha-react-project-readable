@@ -98,10 +98,10 @@ class PostsTable extends Component {
                     <button className="btn btn-warning" onClick={() => this.handleVotar(postagem.id, 'downVote')}>
                       <span className="glyphicon glyphicon-thumbs-down"/>
                     </button>
-                    <Link className='btn btn-default' to={`/postagem?id=${postagem.id}`}>
+                    <Link className='btn btn-default' to={`/${postagem.category}/${postagem.id}`}>
                       <span className="glyphicon glyphicon-zoom-in"/>
                     </Link>
-                    <Link className='btn btn-primary' to={`/postagem/editar?id=${postagem.id}`}>
+                    <Link className='btn btn-primary' to={`/${postagem.category}/${postagem.id}/editar`}>
                       <span className="glyphicon glyphicon-pencil"/>
                     </Link>
                     <button className='btn btn-danger' onClick={() => this.handleExcluirPostagem(postagem.id)}>

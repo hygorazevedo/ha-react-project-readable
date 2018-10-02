@@ -4,13 +4,11 @@ import { callCarregarPostagem, callCarregarComentarios, callExcluirPostagem, cal
 import { connect } from 'react-redux'
 import Moment from 'moment'
 import Comentarios from './Comentarios'
-import queryString from 'query-string'
 
 class Post extends Component {
   componentDidMount() {
-    const query = queryString.parse(this.props.location.search)
-    this.props.callCarregarPostagem(query.id)
-    this.props.callCarregarComentarios(query.id)
+    this.props.callCarregarPostagem(this.props.match.params.postagem)
+    this.props.callCarregarComentarios(this.props.match.params.postagem)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -69,7 +67,7 @@ class Post extends Component {
             </div>
           </div>
           <div>
-            <Link className="btn btn-primary" to={`${this.props.location.pathname}/editar${this.props.location.search}`}>
+            <Link className="btn btn-primary" to={`${this.props.location.pathname}/editar`}>
               <span className="glyphicon glyphicon-pencil"/>
             </Link>
             <button className="btn btn-danger" onClick={() => this.handleExcluirPostagem(postagem.id)}>

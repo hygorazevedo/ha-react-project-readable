@@ -20,11 +20,13 @@ class CategoriasList extends Component {
 
     this.props.selecionarCategoria(categoria)
 
-    if(categoria === 'all') {
+    if(categoria === '') {
       this.props.callCarregarPostagens()
     } else {
       this.props.callCarregarPostagensPorCategoria(categoria)
     }
+
+    this.props.history.push(`/${categoria}`)
   }
 
   render() {
@@ -34,7 +36,7 @@ class CategoriasList extends Component {
       <section className="categorias-wrapper">
         <h3>Categorias</h3>
         <div className="btn-group">
-          <Link to="#" onClick={this.handleSelecionarCategoria} categoria='all' className="btn btn-secondary">Todas</Link>
+          <Link to="#" onClick={this.handleSelecionarCategoria} categoria='' className="btn btn-secondary">Todas</Link>
           {
             categorias !== undefined && categorias.map((categoria) => (
               <Link to="#" className="btn btn-secondary" key={categoria.name} onClick={this.handleSelecionarCategoria} categoria={categoria.path}>{capitalize(categoria.name)}</Link>
